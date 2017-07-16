@@ -43,11 +43,6 @@ relay-log-info-repository=TABLE
 relay-log-recovery=1
 EOF
 fi
-
-env
-
-
-cat /etc/mysql/mysql.conf.d/mysql_options.cnf
 cat > /etc/mysql/mysql.conf.d/server-id.cnf << EOF
 [mysqld]
 server-id=$SERVER_ID
