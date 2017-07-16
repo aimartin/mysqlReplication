@@ -25,14 +25,15 @@ if [ -z ${MYSQL_ROOT_PASSWORD} ]; then
 else
   ROOT_PASSWORD="-p ${MYSQL_ROOT_PASSWORD}"
 fi
-echo "PASSWORD: ${ROOT_PASSWORD}"
+
 if [ -z "$MASTER_HOST" ]; then
   export SERVER_ID=1
   cp -v /init-master.sh /docker-entrypoint-initdb.d/
 else
   # TODO: make server-id discoverable
   DATE=`date +%s`
-  export SERVER_ID=`$(( ( ${DATE} % 50 ) + 2 ))` #Generate a random number for the ID
+  export SERVER_ID=`echo $(( ( ${DATE} % 50 ) + 2 ))` #Generate a random number for the ID
+  echo ${SERVER_ID}
   cp -v /init-slave.sh /docker-entrypoint-initdb.d/
   cat > /etc/mysql/mysql.conf.d/repl-slave.cnf << EOF
 [mysqld]
@@ -43,6 +44,10 @@ relay-log-recovery=1
 EOF
 fi
 
+env
+
+
+cat /etc/mysql/mysql.conf.d/mysql_options.cnf
 cat > /etc/mysql/mysql.conf.d/server-id.cnf << EOF
 [mysqld]
 server-id=$SERVER_ID
