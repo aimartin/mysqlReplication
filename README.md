@@ -27,6 +27,11 @@ This will create a mysql.conf file adding the following options
 innodb_buffer_pool_size=12G
 innodb_file_per_table=1
 
+
 Notes:
 Be sure you name the MYSQL_BACKUP_DB_XXXX options with different names!
 Be sure you mount the Backup folder outside the box!!
+
+*IMPORTANT*
+If you want Mysql Data to persist, be sure you mount /var/lib/mysql outside the container:
+-v /my/own/datadir:/var/lib/mysql

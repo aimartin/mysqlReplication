@@ -18,7 +18,6 @@ if [ -n "$MASTER_PORT_3306_TCP_ADDR" ]; then
   export MASTER_HOST=$MASTER_PORT_3306_TCP_ADDR
   export MASTER_PORT=$MASTER_PORT_3306_TCP_PORT
 fi
-echo "Master: ${MASTER_HOST}"
 
 if [ -z ${MYSQL_ROOT_PASSWORD} ]; then
   ROOT_PASSWORD=""
@@ -28,13 +27,14 @@ fi
 
 if [ -z "$MASTER_HOST" ]; then
   export SERVER_ID=1
+  echo "This host is the Master"
   cp -v /init-master.sh /docker-entrypoint-initdb.d/
 else
   # TODO: make server-id discoverable
   DATE=`date +%s`
   export SERVER_ID=`echo $(( ( ${DATE} % 50 ) + 2 ))` #Generate a random number for the ID
-  echo ${SERVER_ID}
   cp -v /init-slave.sh /docker-entrypoint-initdb.d/
+  echo "This Host is an Slave: ${SERVER_ID}"
   cat > /etc/mysql/mysql.conf.d/repl-slave.cnf << EOF
 [mysqld]
 log-slave-updates
@@ -50,13 +50,17 @@ EOF
 
 #Set Backups
 if [ ! -z ${MYSQL_BACKUP} ]; then
+  echo "Backups has been Enabled"
   if [ ! -d /var/backups/ ]; then
     mkdir -p /var/backups/
   fi
   echo "0 * * * * /usr/local/bin/mysql_backup.sh"  | crontab -u root -
-  env | grep mysql_backup_db > /tmp/mysql_backup
+  echo "Crontab Configured: 0 * * * * /usr/local/bin/mysql_backup.sh"
+  env | grep -iMYSQL_BACKUP_DB > /tmp/mysql_backup
   touch /etc/databases_backup
+  echo "Backups Configured for"
   while read p; do
+    echo $p
     echo $p | cut -d '=' -f 2 >> /etc/databases_backup
   done < /tmp/mysql_backup
 fi
