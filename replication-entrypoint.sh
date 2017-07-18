@@ -48,4 +48,17 @@ cat > /etc/mysql/mysql.conf.d/server-id.cnf << EOF
 server-id=$SERVER_ID
 EOF
 
+#Set Backups
+if [ ! -z ${MYSQL_BACKUP} ]; then
+  if [ ! -d /var/backups/ ]; then
+    mkdir -p /var/backups/
+  fi
+  echo "0 * * * * /usr/local/bin/mysql_backup.sh"  | crontab -u root -
+  env | grep mysql_backup_db > /tmp/mysql_backup
+  touch /etc/databases_backup
+  while read p; do
+    echo $p | cut -d '=' -f 2 >> /etc/databases_backup
+  done < /tmp/mysql_backup
+fi
+
 exec docker-entrypoint.sh "$@"
