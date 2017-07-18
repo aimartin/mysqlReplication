@@ -27,7 +27,7 @@ fi
 
 if [ -z "$MASTER_HOST" ]; then
   export SERVER_ID=1
-  echo "This host is the Master"
+  echo "This Host is the Master"
   cp -v /init-master.sh /docker-entrypoint-initdb.d/
 else
   # TODO: make server-id discoverable
