@@ -59,7 +59,7 @@ if [ ! -z ${MYSQL_BACKUP} ]; then
   env | grep -i MYSQL_BACKUP_DB > /tmp/mysql_backup
   touch /etc/databases_backup
   echo "Backups Configured for"
-  while read p; do
+  while read /tmp/mysql_backup; do
     echo $p
     echo $p | cut -d '=' -f 2 >> /etc/databases_backup
   done < /tmp/mysql_backup
