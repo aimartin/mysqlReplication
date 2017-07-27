@@ -56,7 +56,7 @@ if [ ! -z ${MYSQL_BACKUP} ]; then
   fi
   echo "0 * * * * /usr/local/bin/mysql_backup.sh"  | crontab -u root -
   echo "Crontab Configured: 0 * * * * /usr/local/bin/mysql_backup.sh"
-  env | grep -iMYSQL_BACKUP_DB > /tmp/mysql_backup
+  env | grep -i MYSQL_BACKUP_DB > /tmp/mysql_backup
   touch /etc/databases_backup
   echo "Backups Configured for"
   while read p; do
