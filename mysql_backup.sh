@@ -15,7 +15,10 @@ PASS=${REPLICATION_PASSWORD}
 DIR=${BACKUP_FOLDER}
 if [ -z "${BACKUP_FOLDER}" ]; then
 	DIR="/var/backups"
+else
+	DIR=${BACKUP_FOLDER}
 fi 
+echo "Using ${DIR} as Backup Directory"
 ROTATE=2
 
 PREFIX=mysql_backup_
