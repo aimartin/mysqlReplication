@@ -12,7 +12,10 @@
 
 USER=${REPLICATION_USER}
 PASS=${REPLICATION_PASSWORD}
-DIR=/var/backups/
+DIR=${BACKUP_FOLDER}
+if [ -z "${BACKUP_FOLDER}" ]; then
+	DIR="/var/backups"
+fi 
 ROTATE=2
 
 PREFIX=mysql_backup_
